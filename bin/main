@@ -1,0 +1,34 @@
+#! /usr/bin/env node
+
+const program = require("commander");
+const chalk = require("chalk");
+const createModel = require("../lib/create");
+
+// 获取当前版本号
+const version = require("../package.json").version;
+
+program
+  // 配置脚手架名称
+  .name("swen-cli")
+  // 配置命令格式
+  .usage(`<command> [option]`)
+  // 配置版本号
+  .version(version);
+
+program.on("--help", () => {
+  console.log();
+  console.log(
+    `Run ${chalk.cyan("swen-cli <command> --help")} for detaild usage of given command.`
+  );
+});
+
+program
+  .command("create <priject-name>")
+  .description("create a new project")
+  .option("-f, --force", "overwrite target directory if it exists")
+  .option("-u, --username <username>", "specify the github username")
+  .action((projectName, options) => {
+    createModel(projectName, options);
+  });
+
+program.parse(process.argv);
